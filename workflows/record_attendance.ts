@@ -1,4 +1,5 @@
 import { DefineWorkflow, Schema } from "deno-slack-sdk/mod.ts";
+import { RetrieveUserInfoFunction } from "../functions/retrieve_user_info.ts";
 import { RecordAttendanceFunction } from "../functions/record_attendance.ts";
 import { SendMessage } from "../functions/send_message.ts";
 
@@ -22,12 +23,16 @@ const workflow = DefineWorkflow({
   },
 });
 
+const retrieveUserInfoStep = workflow.addStep(RetrieveUserInfoFunction, {
+  interactivity_context: workflow.inputs.interactivity_context,
+  user: workflow.inputs.user,
+});
+
 const formStep = workflow.addStep(
   Schema.slack.functions.OpenForm,
   {
     title: "kintai",
-    interactivity: workflow.inputs.interactivity_context,
-    submit_label: "Send",
+    interactivity: retrieveUserInfoStep.outputs.interactivity_context,
     fields: {
       elements: [{
         name: "channel",
@@ -36,7 +41,7 @@ const formStep = workflow.addStep(
         items: {
           type: Schema.slack.types.channel_id,
         },
-        default: ["CMX8MC5Q8", "C034EU3A76X"],
+        default: retrieveUserInfoStep.outputs.channels,
       }, {
         name: "type",
         title: "種別",
