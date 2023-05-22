@@ -1,6 +1,7 @@
 import { Manifest } from "deno-slack-sdk/mod.ts";
 import RecordAttendanceWorkflow from "./workflows/record_attendance.ts";
 import AttendanceRecordDatastore from "./datastores/attendance_record.ts";
+import UserSetting from "./datastores/user_setting.ts";
 
 /**
  * The app manifest contains the app's configuration. This
@@ -13,7 +14,7 @@ export default Manifest({
   icon: "assets/default_new_app_icon.png",
   workflows: [RecordAttendanceWorkflow],
   outgoingDomains: [],
-  datastores: [AttendanceRecordDatastore],
+  datastores: [AttendanceRecordDatastore, UserSetting],
   botScopes: [
     "commands",
     "chat:write",
