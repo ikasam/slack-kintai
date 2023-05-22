@@ -72,7 +72,7 @@ export default SlackFunction(
     const retrieved_data = JSON.stringify(response.item);
     console.debug(`retrieved data: ${retrieved_data}`);
 
-    const status = "working";
+    const status = inputs.attendance_type;
     const datetime = format(response.item.timestamp, "HH:mm:ss", {});
 
     return { outputs: { status: status, datetime: datetime } };

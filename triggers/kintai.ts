@@ -17,6 +17,9 @@ const kintaiTrigger: Trigger<typeof RecordAttendanceWorkflow.definition> = {
     user: {
       value: TriggerContextData.Shortcut.user_id,
     },
+    interactivity_context: {
+      value: TriggerContextData.Shortcut.interactivity,
+    },
   },
 };
 
