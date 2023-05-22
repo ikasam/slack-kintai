@@ -1,7 +1,7 @@
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
 import UserSetting from "../datastores/user_setting.ts";
 
-export const SendMessage = DefineFunction({
+export const SendMessageFunction = DefineFunction({
   callback_id: "send_message",
   title: "Send Message",
   description: "Send message of attendance",
@@ -29,7 +29,7 @@ export const SendMessage = DefineFunction({
 });
 
 export default SlackFunction(
-  SendMessage,
+  SendMessageFunction,
   async ({ inputs, client }) => {
     const userSetting = {
       user_id: inputs.user,
