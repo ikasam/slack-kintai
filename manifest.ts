@@ -18,8 +18,9 @@ export default Manifest({
   botScopes: [
     "commands",
     "chat:write",
-    "chat:write.public",
+    "chat:write.customize",
     "datastore:read",
     "datastore:write",
+    "users.profile:read",
   ],
 });

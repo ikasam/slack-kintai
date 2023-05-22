@@ -36,6 +36,12 @@ export default SlackFunction(
       channels: inputs.channels,
     };
 
+    const user = await client.users.profile.get({user: inputs.user});
+    if (!user.ok) {
+      const message = `Failed to get user profile: ${user.error}`;
+      console.warn(message);
+    }
+
     const putUserSetting = await client.apps.datastore.put<typeof UserSetting.definition>(
       {
         datastore: "UserSetting",
@@ -51,7 +57,9 @@ export default SlackFunction(
     const sendMessages = inputs.channels.map((channel) => {
       return client.chat.postMessage({
         channel: channel,
-        text: ":cheke-start:",
+        text: ":cheke-start: test",
+        username: user.profile.real_name,
+        icon_url: user.profile.image_1024,
       });
     });
     Promise.all(sendMessages).catch((error) => {
