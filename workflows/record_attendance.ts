@@ -1,5 +1,6 @@
 import { DefineWorkflow, Schema } from "deno-slack-sdk/mod.ts";
 import { RecordAttendanceFunction } from "../functions/record_attendance.ts";
+import { SendMessage } from "../functions/send_message.ts";
 
 const workflow = DefineWorkflow({
   callback_id: "kintai",
@@ -21,7 +22,7 @@ const workflow = DefineWorkflow({
   },
 });
 
-const form = workflow.addStep(
+const formStep = workflow.addStep(
   Schema.slack.functions.OpenForm,
   {
     title: "kintai",
@@ -59,14 +60,15 @@ const form = workflow.addStep(
   },
 );
 
-const workflowStep = workflow.addStep(RecordAttendanceFunction, {
+workflow.addStep(RecordAttendanceFunction, {
   user: workflow.inputs.user,
-  attendance_type: form.outputs.fields.type,
+  attendance_type: formStep.outputs.fields.type,
 });
 
-workflow.addStep(Schema.slack.functions.SendMessage, {
-  channel_id: workflow.inputs.channel,
-  message: `${workflowStep.outputs.status}, ${workflowStep.outputs.datetime}, ${form.outputs.fields.channel}`,
+workflow.addStep(SendMessage, {
+  user: workflow.inputs.user,
+  channels: formStep.outputs.fields.channel,
+  attendance_type: formStep.outputs.fields.type,
 });
 
 export default workflow;
