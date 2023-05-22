@@ -36,13 +36,15 @@ export default SlackFunction(
       channels: inputs.channels,
     };
 
-    const user = await client.users.profile.get({user: inputs.user});
+    const user = await client.users.profile.get({ user: inputs.user });
     if (!user.ok) {
       const message = `Failed to get user profile: ${user.error}`;
       console.warn(message);
     }
 
-    const putUserSetting = await client.apps.datastore.put<typeof UserSetting.definition>(
+    const putUserSetting = await client.apps.datastore.put<
+      typeof UserSetting.definition
+    >(
       {
         datastore: "UserSetting",
         item: userSetting,
@@ -50,7 +52,8 @@ export default SlackFunction(
     );
 
     if (!putUserSetting.ok) {
-      const message = `Failed to put user setting to datastore: ${putUserSetting.error}`;
+      const message =
+        `Failed to put user setting to datastore: ${putUserSetting.error}`;
       console.warn(message);
     }
 
@@ -60,8 +63,15 @@ export default SlackFunction(
         text: ":cheke-start: test",
         username: user.profile.real_name,
         icon_url: user.profile.image_1024,
+      }).then((res) => {
+        if (!res.ok) {
+          console.warn(
+            `Failed to send message: ${res.error}, inputs: {channel: ${channel}, user: ${inputs.user}, username: ${user.profile.real_name}}`,
+          );
+        }
       });
     });
+
     Promise.all(sendMessages).catch((error) => {
       const message = `Failed to send message: ${error}`;
       console.warn(message);
