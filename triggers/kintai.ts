@@ -1,4 +1,5 @@
 import { Trigger } from "deno-slack-sdk/types.ts";
+import { TriggerContextData } from "deno-slack-api/mod.ts";
 import RecordAttendanceWorkflow from "../workflows/record_attendance.ts";
 
 const kintaiTrigger: Trigger<typeof RecordAttendanceWorkflow.definition> = {
@@ -11,10 +12,10 @@ const kintaiTrigger: Trigger<typeof RecordAttendanceWorkflow.definition> = {
   workflow: "#/workflows/kintai",
   inputs: {
     channel: {
-      value: "{{data.channel_id}}",
+      value: TriggerContextData.Shortcut.channel_id,
     },
     user: {
-      value: "{{data.user_id}}",
+      value: TriggerContextData.Shortcut.user_id,
     },
   },
 };
