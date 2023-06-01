@@ -8,7 +8,7 @@ const kintaiTrigger: Trigger<typeof RecordAttendanceWorkflow.definition> = {
   shortcut: {
     button_text: "kintai",
   },
-  description: "Kintai trigger",
+  description: "Slack Kintai の起動",
   workflow: "#/workflows/kintai",
   inputs: {
     user: {

@@ -8,7 +8,7 @@ const settingTrigger: Trigger<typeof SettingsWorkflow.definition> = {
   shortcut: {
     button_text: "kintai-setting",
   },
-  description: "Kintai setting trigger",
+  description: "Slack Kintai の設定",
   workflow: "#/workflows/setting",
   inputs: {
     user: {
