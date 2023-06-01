@@ -1,5 +1,6 @@
 const emojiMapping: { [key: string]: string; } = {
   "clock_in": ":cheke-start:",
+  "lunch_break": ":cheke-lunch:",
   "break": ":cheke-break:",
   "resume": ":cheke-restart:",
   "clock_out": ":cheke-end:",

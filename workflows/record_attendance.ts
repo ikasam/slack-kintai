@@ -29,10 +29,11 @@ const formStep = workflow.addStep(
         name: "type",
         title: "種別",
         type: Schema.types.string,
-        enum: ["clock_in", "break", "resume", "clock_out"],
+        enum: ["clock_in", "lunch_break", "break", "resume", "clock_out"],
         choices: [
           { title: "出勤", value: "clock_in" },
-          { title: "休憩", value: "break" },
+          { title: "お昼休憩", value: "lunch_break" },
+          { title: "中断", value: "break" },
           { title: "再開", value: "resume" },
           { title: "退勤", value: "clock_out" },
         ],
