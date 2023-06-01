@@ -61,7 +61,7 @@ export default SlackFunction(
     return {
       outputs: {
         interactivity_context: inputs.interactivity_context,
-        channels: userSetting.item.channels,
+        channels: userSetting.item.channels ?? [],
       },
     };
   },
