@@ -22,7 +22,7 @@ const workflow = DefineWorkflow({
 const formStep = workflow.addStep(
   Schema.slack.functions.OpenForm,
   {
-    title: "kintai",
+    title: "Kintai",
     interactivity: workflow.inputs.interactivity_context,
     fields: {
       elements: [{
