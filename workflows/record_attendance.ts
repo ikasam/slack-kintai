@@ -56,6 +56,7 @@ workflow.addStep(RecordAttendanceFunction, {
 workflow.addStep(SendMessageFunction, {
   user: workflow.inputs.user,
   attendance_type: formStep.outputs.fields.type,
+  message: formStep.outputs.fields.message,
 });
 
 export default workflow;

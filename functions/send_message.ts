@@ -1,5 +1,6 @@
 import { DefineFunction, Schema, SlackFunction } from "deno-slack-sdk/mod.ts";
 import UserSetting from "../datastores/user_setting.ts";
+import { buildMessageText } from "./domain/build_message_text.ts";
 
 export const SendMessageFunction = DefineFunction({
   callback_id: "send_message",
@@ -15,6 +16,10 @@ export const SendMessageFunction = DefineFunction({
       attendance_type: {
         type: Schema.types.string,
         description: "Attendance type",
+      },
+      message: {
+        type: Schema.types.string,
+        description: "Additional message",
       },
     },
     required: ["user", "attendance_type"],
@@ -60,7 +65,7 @@ export default SlackFunction(
     const sendMessages = channels.map((channel) => {
       return client.chat.postMessage({
         channel: channel,
-        text: ":cheke-start: test",
+        text:buildMessageText(inputs.attendance_type, inputs.message),
         username: user.profile.real_name,
         icon_url: user.profile.image_1024,
       }).then((res) => {
