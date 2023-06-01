@@ -43,6 +43,6 @@ Deno.test("Sample function test", async () => {
   const { outputs } = await RecordAttendanceFunction(createContext({ inputs }));
   await assertEquals(
     outputs?.status,
-    "working",
+    "clock_in",
   );
 });
