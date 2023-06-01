@@ -1,5 +1,4 @@
 import { DefineWorkflow, Schema } from "deno-slack-sdk/mod.ts";
-import { RetrieveUserInfoFunction } from "../functions/retrieve_user_info.ts";
 import { RecordAttendanceFunction } from "../functions/record_attendance.ts";
 import { SendMessageFunction } from "../functions/send_message.ts";
 
@@ -12,9 +11,6 @@ const workflow = DefineWorkflow({
       interactivity_context: {
         type: Schema.slack.types.interactivity,
       },
-      channel: {
-        type: Schema.slack.types.channel_id,
-      },
       user: {
         type: Schema.slack.types.user_id,
       },
@@ -23,26 +19,13 @@ const workflow = DefineWorkflow({
   },
 });
 
-const retrieveUserInfoStep = workflow.addStep(RetrieveUserInfoFunction, {
-  interactivity_context: workflow.inputs.interactivity_context,
-  user: workflow.inputs.user,
-});
-
 const formStep = workflow.addStep(
   Schema.slack.functions.OpenForm,
   {
     title: "kintai",
-    interactivity: retrieveUserInfoStep.outputs.interactivity_context,
+    interactivity: workflow.inputs.interactivity_context,
     fields: {
       elements: [{
-        name: "channel",
-        title: "勤怠報告チャネル",
-        type: Schema.types.array,
-        items: {
-          type: Schema.slack.types.channel_id,
-        },
-        default: retrieveUserInfoStep.outputs.channels,
-      }, {
         name: "type",
         title: "種別",
         type: Schema.types.string,
@@ -72,7 +55,6 @@ workflow.addStep(RecordAttendanceFunction, {
 
 workflow.addStep(SendMessageFunction, {
   user: workflow.inputs.user,
-  channels: formStep.outputs.fields.channel,
   attendance_type: formStep.outputs.fields.type,
 });
 

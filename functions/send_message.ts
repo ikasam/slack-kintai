@@ -12,52 +12,52 @@ export const SendMessageFunction = DefineFunction({
         type: Schema.slack.types.user_id,
         description: "The user invoking the workflow",
       },
-      channels: {
-        type: Schema.types.array,
-        items: {
-          type: Schema.slack.types.channel_id,
-        },
-        description: "Channels to send messages",
-      },
       attendance_type: {
         type: Schema.types.string,
         description: "Attendance type",
       },
     },
-    required: ["user", "channels", "attendance_type"],
+    required: ["user", "attendance_type"],
   },
 });
 
 export default SlackFunction(
   SendMessageFunction,
   async ({ inputs, client }) => {
-    const userSetting = {
-      user_id: inputs.user,
-      channels: inputs.channels,
-    };
+    const user = await client.users.profile.get({ user: inputs.user }).then(
+      (response) => {
+        if (!response.ok) {
+          const message = `Failed to get user profile: ${response.error}`;
+          console.warn(message);
+        }
 
-    const user = await client.users.profile.get({ user: inputs.user });
-    if (!user.ok) {
-      const message = `Failed to get user profile: ${user.error}`;
-      console.warn(message);
-    }
+        return response;
+      },
+    );
 
-    const putUserSetting = await client.apps.datastore.put<
+    const channels = await client.apps.datastore.get<
       typeof UserSetting.definition
     >(
       {
         datastore: "UserSetting",
-        item: userSetting,
+        id: inputs.user,
       },
-    );
+    ).then((response): string[] => {
+      if (!response.ok) {
+        const message =
+          `Failed to get user setting from datastore: ${response.error}`;
+        console.warn(message);
+      }
 
-    if (!putUserSetting.ok) {
-      const message =
-        `Failed to put user setting to datastore: ${putUserSetting.error}`;
-      console.warn(message);
-    }
+      if (!response.item) {
+        const message = `No setting for the user: ${inputs.user}`;
+        console.info(message);
+      }
 
-    const sendMessages = inputs.channels.map((channel) => {
+      return response.item.channels ?? [];
+    });
+
+    const sendMessages = channels.map((channel) => {
       return client.chat.postMessage({
         channel: channel,
         text: ":cheke-start: test",

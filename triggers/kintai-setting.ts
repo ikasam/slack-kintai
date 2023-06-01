@@ -1,15 +1,15 @@
 import { Trigger } from "deno-slack-sdk/types.ts";
 import { TriggerContextData } from "deno-slack-api/mod.ts";
-import RecordAttendanceWorkflow from "../workflows/record_attendance.ts";
+import SettingsWorkflow from "../workflows/settings.ts";
 
-const kintaiTrigger: Trigger<typeof RecordAttendanceWorkflow.definition> = {
+const settingTrigger: Trigger<typeof SettingsWorkflow.definition> = {
   type: "shortcut",
-  name: "kintai",
+  name: "kintai-setting",
   shortcut: {
-    button_text: "kintai",
+    button_text: "kintai-setting",
   },
-  description: "Kintai trigger",
-  workflow: "#/workflows/kintai",
+  description: "Kintai setting trigger",
+  workflow: "#/workflows/setting",
   inputs: {
     user: {
       value: TriggerContextData.Shortcut.user_id,
@@ -20,4 +20,4 @@ const kintaiTrigger: Trigger<typeof RecordAttendanceWorkflow.definition> = {
   },
 };
 
-export default kintaiTrigger;
+export default settingTrigger;

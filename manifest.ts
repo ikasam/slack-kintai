@@ -1,5 +1,6 @@
 import { Manifest } from "deno-slack-sdk/mod.ts";
 import RecordAttendanceWorkflow from "./workflows/record_attendance.ts";
+import SettingsWorkflow from "./workflows/settings.ts";
 import AttendanceRecordDatastore from "./datastores/attendance_record.ts";
 import UserSetting from "./datastores/user_setting.ts";
 
@@ -12,7 +13,7 @@ export default Manifest({
   name: "kintai",
   description: "勤怠打つやつ（開発中）",
   icon: "assets/default_new_app_icon.png",
-  workflows: [RecordAttendanceWorkflow],
+  workflows: [RecordAttendanceWorkflow, SettingsWorkflow],
   outgoingDomains: [],
   datastores: [AttendanceRecordDatastore, UserSetting],
   botScopes: [
